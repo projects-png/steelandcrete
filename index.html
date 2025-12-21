@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Steel and Crete</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body,html{font-family:Arial, sans-serif;scroll-behavior:smooth;overflow-x:hidden;}
+
+    /* Header */
+    header{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      display:flex;align-items:center;justify-content:space-between;
+      padding:15px 40px;
+      background:transparent;
+      transition:background 0.4s ease, box-shadow 0.4s ease;
+    }
+    .header-brand{display:flex;align-items:center;gap:10px;}
+    .header-brand img{
+  height:60px;        /* Increased logo size */
+  width:auto;         /* Keep aspect ratio */
+  object-fit:contain;
+}
+
+    .header-brand .brand-text{display:flex;flex-direction:column;line-height:1.2;}
+    .header-brand .line1{
+  font-size:1.6rem;   /* Increased size */
+  font-weight:800;    /* Stronger weight */
+  letter-spacing:0.5px;
+  color:#ffffff;
+}
+    .header-brand .line2{font-size:0.8rem;font-weight:600;color:#ddd;}
+    header.scrolled .header-brand .line1,
+    header.scrolled .header-brand .line2{color:#333;}
+
+    nav{display:flex;gap:25px;}
+    nav a{
+      text-decoration:none;font-weight:600;font-size:1rem;color:#f8f8f8;
+      transition:color 0.3s ease;
+    }
+    nav a:hover{color:#ffd700;}
+    header.scrolled{background:#fff;box-shadow:0 2px 6px rgba(0,0,0,0.1);}
+    header.scrolled nav a{color:rgba(255, 166, 0, 0.909);}
+    header.scrolled .menu-toggle span{background:#333;}
+    .menu-toggle{display:none;flex-direction:column;gap:5px;cursor:pointer;}
+    .menu-toggle span{width:25px;height:3px;background:#fff;transition:background 0.3s ease;}
+    @media(max-width:768px){
+      nav{display:none;flex-direction:column;position:absolute;top:60px;right:40px;background:rgba(255,255,255,0.95);padding:15px;border-radius:8px;}
+      nav a{color:#333;}
+      nav.active{display:flex;}
+      .menu-toggle{display:flex;}
+    }
+
+    /* Slider */
+    .slider{position:relative;height:100vh;width:100%;overflow:hidden;}
+    .slide{position:absolute;inset:0;opacity:0;transition:opacity 1s ease;}
+    .slide img{width:100%;height:100%;object-fit:cover;}
+    .slide.active{opacity:1;z-index:1;}
+    .slide.active img{transform:scale(1.05);transition:transform 8s ease;}
+    .overlay-text{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size:2rem;
+  font-style: italic;
+  font-weight: 700;
+  color:#ffffff;
+  text-align:center;
+  padding:0 20px;
+
+  /* 3D border / depth effect */
+  text-shadow:
+    1px 1px 0 #222,
+    2px 2px 0 #222,
+    3px 3px 0 #222,
+    0 6px 12px rgba(0,0,0,0.7);
+
+  /* Optional stroke for sharper border */
+  -webkit-text-stroke: 0.8px rgba(0,0,0,0.6);
+
+  opacity:0;
+  transition:opacity 1s ease;
+}
+
+    .slide.active .overlay-text{opacity:1;}
+    @media(max-width:1024px){.overlay-text{font-size:2rem;}}
+    @media(max-width:768px){.overlay-text{font-size:1.5rem;}}
+    @media(max-width:480px){.overlay-text{font-size:1.2rem;}}
+    .dots{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:10px;z-index:10;}
+    .dot{width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,0.7);cursor:pointer;}
+    .dot.active{background:#fff;}
+
+    /* Sections */
+    section{padding:80px 40px;}
+    #about{background:#f9f9f9;text-align:center;}
+    #about h2{font-size:2rem;margin-bottom:20px;color:#333;}
+    #about p{max-width:900px;margin:0 auto 20px;line-height:1.6;color:#555;text-align:justify;}
+
+    /* Founders */
+    .founders{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:20px;
+  margin-top:40px;
+}
+
+.card{
+  perspective:1000px;
+  cursor:pointer;
+}
+
+.inner{
+  position:relative;
+  width:100%;
+  height:370px;
+  transform-style:preserve-3d;
+  transition:transform 0.8s ease;
+}
+
+/* Hover (Desktop) */
+.card:hover .inner{
+  transform:rotateY(180deg);
+}
+
+/* Tap (Mobile) */
+.card.active .inner{
+  transform:rotateY(180deg);
+}
+
+.front,.back{
+  position:absolute;
+  inset:0;
+  backface-visibility:hidden;
+  border-radius:10px;
+  overflow:hidden;
+  box-shadow:0 4px 8px rgba(0,0,0,0.2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* Back side */
+.back{
+  transform:rotateY(180deg);
+  background:#1f2937;
+  color:#fff;
+}
+
+    /* Front with centered photo + black strip */
+    .front{display:flex;align-items:center;justify-content:center;flex-direction:column;background:#fff;}
+    .front img{width:100%;height:100%;object-fit:contain;background:#fff;}
+    .name-strip{
+      position:absolute;bottom:0;left:0;right:0;
+      background:rgba(0,0,0,0.85);
+      color:#fff;
+      padding:8px;
+      font-size:14px;
+      text-align:center;
+      font-weight:600;
+    }
+    .name-strip span{display:block;font-size:12px;font-weight:400;}
+
+    /* Back with scrollable stylish description */
+    .back{
+      background:linear-gradient(135deg,#fdfdfd,#f3f3f3);
+      transform:rotateY(180deg);
+      display:flex;flex-direction:column;align-items:center;
+      padding:15px;
+      text-align:center;
+      overflow-y:auto;
+    }
+    .back h3{font-size:12px;margin-bottom:6px;color:#222;}
+    .back p{font-size:10.5px;line-height:1.4;color:#444;text-align:justify;}
+    .back::-webkit-scrollbar{width:6px;}
+    .back::-webkit-scrollbar-thumb{background:#bbb;border-radius:4px;}
+/* ---------- TESTIMONIALS ---------- */
+#testimonials{
+  background:#f5f7fa;
+  padding:80px 40px;
+  text-align:center;
+}
+
+#testimonials h2{
+  font-size:2.4rem;
+  color:#111;
+  margin-bottom:8px;
+}
+
+#testimonials .sub{
+  font-size:14px;
+  color:#666;
+  margin-bottom:50px;
+}
+
+.testimonial-slider{
+  max-width:900px;
+  margin:auto;
+  position:relative;
+  overflow:hidden;
+}
+
+.testimonial-track{
+  position:relative;
+  min-height:260px;
+}
+
+.testimonial-box{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  transform:translateX(40px);
+  transition:opacity .8s ease, transform .8s ease;
+  background:#fff;
+  padding:40px 35px;
+  border-radius:16px;
+  box-shadow:0 15px 30px rgba(0,0,0,.15);
+}
+
+.testimonial-box.active{
+  opacity:1;
+  transform:translateX(0);
+}
+
+.testimonial-box p{
+  font-size:16px;
+  color:#444;
+  line-height:1.7;
+  margin-bottom:20px;
+}
+
+.testimonial-box h4{
+  font-size:16px;
+  font-weight:700;
+  color:#111;
+}
+
+.testimonial-box span{
+  font-size:13px;
+  color:#777;
+}
+
+/* Dots */
+.testimonial-dots{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-top:25px;
+}
+
+.testimonial-dot{
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:#bbb;
+  cursor:pointer;
+}
+
+.testimonial-dot.active{
+  background:#111;
+}
+
+    /* Projects */
+    #projects{background:#fff;}
+    #projects h2{text-align:center;font-size:2rem;margin-bottom:30px;color:#333;}
+    .project-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;}
+    .project{position:relative;overflow:hidden;border-radius:10px;}
+    .project img{width:100%;height:250px;object-fit:cover;transition:transform 0.6s;}
+    .project:hover img{transform:scale(1.1);}
+    .project .desc{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.6);color:#fff;padding:15px;text-align:center;transform:translateY(100%);transition:transform 0.5s;}
+    .project:hover .desc{transform:translateY(0);}
+
+   /* ---------- CONTACT CARDS ---------- */
+.contact-card{
+  background:#ffffff;
+  padding:25px;
+  border-radius:14px;
+  box-shadow:0 10px 22px rgba(0,0,0,0.12);
+}
+
+.contact-card h3{
+  font-size:18px;
+  margin-bottom:10px;
+  color:#111;
+}
+
+.contact-card p{
+  font-size:14px;
+  color:#444;
+  line-height:1.6;
+  margin-bottom:12px;
+}
+
+.contact-email{
+  font-size:14px;
+  font-weight:600;
+}
+
+.contact-email a{
+  color:#2563eb;
+  text-decoration:none;
+}
+
+.contact-email a:hover{
+  text-decoration:underline;
+}
+
+.contact-card iframe{
+  margin-top:15px;
+  width:100%;
+  height:220px;
+  border-radius:12px;
+  border:0;
+}
+.contact-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr); /* 3 cards in one row */
+  gap:30px;
+  max-width:1200px;   /* wider for 3 cards */
+  width:100%;
+  margin:auto;
+}
+
+
+/* ---------- PROJECT SECTION ---------- */
+#projects{
+  padding:80px 40px;
+  background:#ffffff;
+}
+
+#projects h2{
+  text-align:center;
+  font-size:2.4rem;
+  font-weight:700;
+  color:#111;
+  margin-bottom:10px;
+}
+
+#projects .sub{
+  text-align:center;
+  font-size:14px;
+  color:#666;
+  margin-bottom:50px;
+}
+
+/* GRID */
+.project-grid{
+  max-width:1200px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:30px;
+}
+
+/* CARD */
+.project-card{
+  position:relative;
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 10px 25px rgba(0,0,0,0.18);
+}
+
+/* IMAGE */
+.project-card img{
+  width:100%;
+  height:250px;
+  object-fit:cover;
+  transition:transform .6s;
+}
+
+.project-card:hover img{
+  transform:scale(1.12);
+}
+/* ---------- EMAIL BOXES ---------- */
+.email-boxes{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+  margin-top:20px;
+}
+
+.email-card{
+  background:#f9fafb;
+  border-radius:12px;
+  padding:20px;
+  box-shadow:0 6px 15px rgba(0,0,0,0.12);
+  text-align:center;
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+
+.email-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 10px 22px rgba(0,0,0,0.18);
+}
+
+.email-card h4{
+  font-size:15px;
+  color:#111;
+  margin-bottom:10px;
+}
+
+.email-card a{
+  display:inline-block;
+  font-size:14px;
+  font-weight:600;
+  color:#2563eb;
+  text-decoration:none;
+  word-break:break-word;
+}
+
+.email-card a:hover{
+  text-decoration:underline;
+}
+/* ---------- CONTACT CENTERING ---------- */
+#contact{
+  background:#f9f9f9;
+  text-align:center;
+}
+
+#contact h2{
+  font-size:2.4rem;
+  margin-bottom:40px;
+  color:#111;
+}
+
+/* Center container */
+.contact-wrapper{
+  display:flex;
+  justify-content:center;
+}
+
+.contact-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr); /* FORCE 3 boxes in one line */
+  gap:30px;
+  max-width:1200px;  /* enough width for 3 cards */
+  width:100%;
+  margin:0 auto;
+}
+
+
+/* Cards */
+.contact-card{
+  background:#fff;
+  padding:25px;
+  border-radius:14px;
+  box-shadow:0 10px 22px rgba(0,0,0,0.12);
+  text-align:left;
+}
+
+/* Responsive */
+@media(max-width:768px){
+  .contact-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+
+/* TITLE OVERLAY */
+.project-title{
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  padding:14px;
+  background:rgba(0,0,0,0.75);
+  color:#fff;
+  font-size:16px;
+  font-weight:600;
+  text-align:center;
+}
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .project-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:600px){
+  .project-grid{
+    grid-template-columns:1fr;
+  }
+}
+/* ---------- SERVICES SECTION ---------- */
+#services{
+  padding:80px 40px;
+  background:#ffffff;
+  text-align:center;
+}
+
+#services h2{
+  font-size:2.4rem;
+  color:#111;
+  margin-bottom:10px;
+}
+
+.services-sub{
+  font-size:14px;
+  color:#666;
+  margin-bottom:50px;
+}
+
+/* GRID */
+.services-grid{
+  max-width:1200px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:30px;
+}
+
+/* CARD */
+.service-card{
+  background:#f9fafb;
+  padding:30px 20px;
+  border-radius:16px;
+  box-shadow:0 10px 22px rgba(0,0,0,0.12);
+  transition:transform .35s ease, box-shadow .35s ease;
+}
+
+.service-card:hover{
+  transform:translateY(-6px);
+  box-shadow:0 16px 32px rgba(0,0,0,0.18);
+}
+
+.service-card span{
+  font-size:38px;
+  display:block;
+  margin-bottom:15px;
+}
+
+.service-card h4{
+  font-size:16px;
+  font-weight:700;
+  color:#111;
+  margin-bottom:10px;
+}
+
+.service-card p{
+  font-size:14px;
+  color:#555;
+  line-height:1.5;
+}
+
+/* RESPONSIVE */
+@media(max-width:1024px){
+  .services-grid{
+    grid-template-columns:repeat(3,1fr);
+  }
+}
+
+@media(max-width:768px){
+  .services-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:480px){
+  .services-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+
+    /* WhatsApp */
+    .whatsapp-btn{position:fixed;bottom:20px;right:20px;background:#25d366;color:#fff;padding:15px;border-radius:50%;box-shadow:0 4px 8px rgba(0,0,0,0.2);font-size:24px;cursor:pointer;z-index:200;}
+
+    /* Footer */
+    footer{background:#111;color:#ccc;text-align:center;padding:15px;font-size:0.9rem;}
+  </style>
+</head>
+<body>
+  <header id="header">
+    <div class="header-brand">
+      <img src="logo.png" alt="Logo">
+      <div class="brand-text">
+        <span class="line1">Steel & Crete</span>
+        <span class="line2">Structural Solutions LLP</span>
+      </div>
+    </div>
+    <div class="menu-toggle" id="menuToggle"><span></span><span></span><span></span></div>
+    <nav id="navMenu">
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+      <a href="#projects">Projects</a>   
+      <a href="#testimonials">Testimonial</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+ 
+ <!-- Slider -->
+  <section class="slider" id="slider">
+    <div class="slide active"><img src="1.jpeg"><div class="overlay-text">Tailored Designs for Structures</div></div>
+    <div class="slide"><img src="captain.png"><div class="overlay-text">Cutting Edge Engineering Solutions</div></div>
+    <div class="slide"><img src="3.png"><div class="overlay-text">Turning Dreams into Reality</div></div>
+    <div class="slide"><img src="2.jpeg"><div class="overlay-text">Design for Challenging Structures</div></div>
+    <div class="dots" id="dots"></div>
+  </section>
+
+  <!-- About / Founders -->
+  <section id="about">
+    <h2>About Us</h2>
+    <p><strong>STEEL & CRETE Structural Solutions LLP</strong> is a specialist structural engineering consultancy based in Kochi, delivering high-end civil and structural engineering solutions aligned with global practices. With hands-on project experience across India, the Middle East,Europe, and South Korea, our engineers have contributed to prestigious developments including nuclear power plants, high-rise buildings, pre-engineered structures, bridges, and machine foundations.</p>
+
+    <p>We specialize in structural design, retrofitting, construction support, and vibration engineering, with a strong focus on optimal, innovative design that reduces material usage and construction cost. Sustainability underpins our approach through efficient structural systems and innovative materials. For every structural engineering requirement, we deliver practical, economical, and sustainable solutions—from concept to execution.</p>
+    
+    <div class="founders">
+      <!-- Founder 1 -->
+      <div class="card">
+        <div class="inner">
+          <div class="front">
+            <img src="dileep.jpeg" alt="Dr. Dhileep M. Kaviyad">
+            <div class="name-strip">Dr. Dhileep M. Kaviyad <span>Lead Structural Engineer</span></div>
+          </div>
+          <div class="back">
+            <h3>Dr. Dhileep M. Kaviyad</h3>
+            <p>Well-experienced in implementing innovative and economical designs for structural systems in collaboration with other stakeholders like architects, contractors, geotechnical experts, MEP, and fire consultants. With nearly 25 years of experience in structural design and retrofitting, he has worked on a diverse set of RCC, PSC, Steel buildings, tanks, towers, machine foundations, and industrial & power plant structures. His expertise includes wind tunnel and shake table tests, aseismic design of nuclear power plants, multiscale modelling, vibration studies on bridges due to high-speed express trains, and sustainable structures. Presently, he is focusing more on the design of composite and/or sustainable structures/architectural components made up from a wide spectrum of materials.</p>
+          </div>
+        </div>
+      </div>
+      <!-- Founder 2 -->
+      <div class="card">
+        <div class="inner">
+          <div class="front">
+            <img src="shoba.jpg" alt="Dr Sopna Nair">
+            <div class="name-strip">Dr Sopna Nair <span>Senior Structural Engineer</span></div>
+          </div>
+          <div class="back">
+            <h3>Dr.Sopna Nair</h3>
+            <p>With 16 years of experience in structural and civil engineering projects across India, the Middle East, and Europe, Sopna specializes in the design and review of steel and concrete buildings, high-rise structures, stormwater networks, roads, and infrastructure. Her expertise spans all project phases, with advanced proficiency in ETABS, STAAD, SAP, SAFE, PROKON, StormCAD, and PIPENET.
+
+As a Pearl Qualified Professional, she places a strong emphasis on sustainability, delivering efficient, environmentally responsible, and code-compliant solutions. Her strengths include value engineering, interdisciplinary coordination, geotechnical interpretation, claim management, and comprehensive project documentation.Sopna has extensive experience working with American, British, and Indian standards and has contributed to major projects across the UAE, Oman, Saudi Arabia, Iraq, India, and Germany.</p>
+          </div>
+        </div>
+      </div>
+       <!-- Founder 3 -->
+      <div class="card">
+        <div class="inner">
+          <div class="front">
+            <img src="daniel.jpeg" alt="Er. Daniel A V">
+            <div class="name-strip">Er. Daniel A V <span>Senior Structural Engineer</span></div>
+          </div>
+          <div class="back">
+            <h3>Er. Daniel A V</h3>
+            <p>A dedicated Structural Engineer with over 15 years of experience in the design of RCC and steel structures. His expertise spans residential, commercial, and industrial projects, with a focus on seismic resilience and code compliance. Passionate about innovation and precision, he brings clarity and confidence to every structural challenge, helping clients realize their architectural visions with strength and reliability. He has extensive experience in designing and delivering architectural, structural, and non-structural components using steel and other materials, as well as in soil–structure interaction.</p>
+          </div>
+        </div>
+      </div>
+      <!-- Founder 4 -->
+      <div class="card">
+        <div class="inner">
+          <div class="front">
+            <img src="ramya.jpeg" alt="Er. Ramya K M">
+            <div class="name-strip">Er. Ramya K M <span>Structural Engineer</span></div>
+          </div>
+          <div class="back">
+            <h3>Er. Ramya K M</h3>
+            <p>Results-driven Structural Engineer with more than 10 years of experience in the analysis, design, and execution of diverse structures, including residential, commercial, industrial, and infrastructure projects. Skilled in structural design codes, seismic analysis, and sustainable design practices. </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- SERVICES -->
+<section id="services">
+  <h2>Our Services</h2>
+  <p class="services-sub">
+    Comprehensive structural engineering solutions tailored to complex challenges
+  </p>
+
+  <div class="services-grid">
+
+    <div class="service-card">
+  <span>🏗️</span>
+  <h4>Structural Designs in Steel & Concrete</h4>
+  <p>Optimized design of RCC, steel and composite structural systems.</p>
+</div>
+
+<div class="service-card">
+  <span>🔧</span>
+  <h4>Renovation, Expansion & Retrofitting</h4>
+  <p>Strengthening and modification of existing structures.</p>
+</div>
+
+<div class="service-card">
+  <span>📊</span>
+  <h4>Static & Dynamic Calculations</h4>
+  <p>Accurate analysis for gravity, dynamic and impact loads.</p>
+</div>
+
+<div class="service-card">
+  <span>🌬️</span>
+  <h4>Wind & Seismic Design</h4>
+  <p>Earthquake- and wind-resistant structural solutions.</p>
+</div>
+
+<div class="service-card">
+  <span>🏭</span>
+  <h4>Industrial Facilities</h4>
+  <p>Design of industrial buildings and heavy-duty structures.</p>
+</div>
+
+<div class="service-card">
+  <span>⚙️</span>
+  <h4>Machine Foundations</h4>
+  <p>Vibration-controlled foundations for rotating machinery.</p>
+</div>
+
+<div class="service-card">
+  <span>🌉</span>
+  <h4>Design of Special Structures</h4>
+  <p>Complex, unconventional and high-performance structures.</p>
+</div>
+
+<div class="service-card">
+  <span>🏢</span>
+  <h4>Building Condition Evaluation</h4>
+  <p>Structural health assessment and safety evaluation.</p>
+</div>
+
+<div class="service-card">
+  <span>🔍</span>
+  <h4>Structure Failure Investigation</h4>
+  <p>Root cause analysis of structural distress and failures.</p>
+</div>
+
+<div class="service-card">
+  <span>✔️</span>
+  <h4>Design Proof Checking</h4>
+  <p>Independent verification and peer review of designs.</p>
+</div>
+
+<div class="service-card">
+  <span>🎓</span>
+  <h4>Structural Expertise</h4>
+  <p>Expert consultancy for complex engineering challenges.</p>
+</div>
+
+<div class="service-card">
+  <span>📐</span>
+  <h4>Feasibility Studies</h4>
+  <p>Technical feasibility and preliminary structural assessments.</p>
+</div>
+
+
+  </div>
+</section>
+
+
+
+
+  <section id="projects">
+  <h2>PROJECTS</h2>
+  <p class="sub">Steel & Crete Structural Solutions LLP</p>
+
+  <div class="project-grid">
+
+    <div class="project-card">
+      <img src="special.png">
+      <div class="project-title">Special Structures</div>
+    </div>
+
+    <div class="project-card">
+      <img src="community.png">
+      <div class="project-title">Community Buildings</div>
+    </div>
+
+    <div class="project-card">
+      <img src="F_School.png">
+      <div class="project-title">Educational Buildings</div>
+    </div>
+
+    <div class="project-card">
+      <img src="health.jpeg">
+      <div class="project-title">Health & Hospital Buildings</div>
+    </div>
+
+    <div class="project-card">
+      <img src="residential.jpeg">
+      <div class="project-title">Residential Buildings</div>
+    </div>
+
+    <div class="project-card">
+      <img src="Steel Structures.jpg">
+      <div class="project-title">Steel Structures</div>
+    </div>
+
+    <div class="project-card">
+      <img src="multistorey.jpeg">
+      <div class="project-title">Multistorey Buildings</div>
+    </div>
+
+    <div class="project-card">
+      <img src="machinefoundation.png">
+      <div class="project-title">Machine Foundation Systems</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section id="testimonials">
+  <h2>What Our Clients Say</h2>
+  <p class="sub">Trusted by Architects, Builders & Developers</p>
+
+  <div class="testimonial-slider">
+    <div class="testimonial-track">
+
+      <div class="testimonial-box active">
+        <p>
+          Steel & Crete delivered an exceptionally optimized structural design that
+          helped us reduce material costs without compromising safety.
+        </p>
+        <h4>Arjun Menon</h4>
+        <span>Project Manager, High-Rise Development</span>
+      </div>
+
+      <div class="testimonial-box">
+        <p>
+          Their technical expertise and attention to seismic detailing was outstanding.
+          A highly professional team.
+        </p>
+        <h4>Ravi Kumar</h4>
+        <span>Senior Architect</span>
+      </div>
+
+      <div class="testimonial-box">
+        <p>
+          The vibration analysis and machine foundation design were executed flawlessly.
+          We highly recommend Steel & Crete.
+        </p>
+        <h4>Mohammed Faisal</h4>
+        <span>Industrial Client</span>
+      </div>
+
+    </div>
+
+    <div class="testimonial-dots"></div>
+  </div>
+</section>
+<section id="contact">
+<div class="contact-grid">
+
+  <!-- Corporate Office -->
+  <div class="contact-card">
+    <h3>Corporate Office</h3>
+    <p>
+      Steel and Crete Structural Solutions LLP<br>
+      Pottachal Nagar Road,<br>
+      Changampuzha Nagar PO,<br>
+      Ernakulam – 682033
+    </p>
+
+    <p class="contact-email">
+      📧 <a href="mailto:projects@steelandcrete.com">
+        projects@steelandcrete.com
+      </a>
+    </p>
+
+      <p class="contact-email">
+      📧 <a href="mailto:projects@steelandcrete.com">
+        steelandcrete@gmail.com
+      </a>
+    </p>
+
+     <p class="contact-email">
+      📧 <a href="#">
+      +918943824028
+      </a>
+    </p>
+    
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d31430.146250525875!2d76.2989103129192!3d10.035970623982163!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sXXVI%2F406%2CPottachal%20Nagar%20Road%2CChangampuzha%20Nagar%20PO%2C%20Ernakulam%20-%20682033!5e0!3m2!1sen!2sin!4v1757668979521!5m2!1sen!2sin">
+    </iframe>
+  </div>
+
+  <!-- Workspace -->
+  <div class="contact-card">
+    <h3>Workspace</h3>
+    <p>
+      Steel and Crete Structural Solutions LLP<br>
+      XXI/152, Panadana,<br>
+      Corrazone, Cochin University PO,<br>
+      Kalamassery, Ernakulam – 682022
+    </p>
+
+    <p class="contact-email">
+      📧 <a href="mailto:steelandcrete@gmail.com">
+        steelandcrete@gmail.com
+      </a>
+    </p>
+
+     <p class="contact-email">
+      📧 <a href="mailto:projects@steelandcrete.com">
+        projects@steelandcrete.com
+      </a>
+    </p>
+
+     <p class="contact-email">
+      📧 <a href="#">
+      +918943824028
+      </a>
+    </p>
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3928.6294434312263!2d76.33129137354146!3d10.047405172220234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b080d18167f5c5f%3A0x93154f2ad50a56b9!2sCorrazone%20Coworking%20Space!5e0!3m2!1sen!2sin!4v1757669793410!5m2!1sen!2sin">
+    </iframe>
+  </div>
+<!-- Contact Info -->
+<div class="contact-card">
+  <h3>Job Opportunities</h3>
+
+  <p>
+    Steel and Crete Structural Solutions LLP<br>
+    Kochi, Kerala – India
+  </p>
+
+  <p class="contact-email">
+    📧 <a href="mailto:info@steelandcrete.com">
+      jobs@steelandcrete.com
+    </a>
+  </p>
+
+ 
+</div>
+
+  
+
+</div>
+
+</section>
+
+  <a href="https://wa.me/918943824028" target="_blank" class="whatsapp-btn">💬</a>
+
+  <footer>Website was developed and deployed by TES</footer>
+
+  <script>
+    const slides=document.querySelectorAll('.slide');
+    const dotsBox=document.getElementById('dots');
+    let idx=0,timer;
+    function makeDots(){
+      slides.forEach((_,i)=>{
+        const d=document.createElement('span');
+        d.className='dot';
+        d.addEventListener('click',()=>show(i));
+        dotsBox.appendChild(d);
+      });
+    }
+    function updateDots(){[...dotsBox.children].forEach((d,i)=>d.classList.toggle('active',i===idx));}
+    function show(i){
+      slides[idx].classList.remove('active');
+      idx=(i+slides.length)%slides.length;
+      slides[idx].classList.add('active');
+      updateDots();restart();
+    }
+    function next(){show(idx+1)}
+    function restart(){clearInterval(timer);timer=setInterval(next,6000)}
+    makeDots();updateDots();restart();
+
+    // Mobile menu
+    const menuToggle=document.getElementById('menuToggle');
+    const navMenu=document.getElementById('navMenu');
+    menuToggle.addEventListener('click',()=>navMenu.classList.toggle('active'));
+
+    // Header scroll
+    const header=document.getElementById('header');
+    window.addEventListener('scroll',()=>{
+      const sliderHeight=document.getElementById('slider').offsetHeight;
+      if(window.scrollY>sliderHeight-80){
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+    /* -------- TESTIMONIAL SLIDER (ISOLATED) -------- */
+const testimonials = document.querySelectorAll('.testimonial-box');
+const tDotsBox = document.querySelector('.testimonial-dots');
+let tIndex = 0;
+let tTimer;
+
+function createTestimonialDots(){
+  testimonials.forEach((_, i) => {
+    const dot = document.createElement('span');
+    dot.className = 'testimonial-dot';
+    dot.addEventListener('click', () => showTestimonial(i));
+    tDotsBox.appendChild(dot);
+  });
+}
+
+function updateTestimonialDots(){
+  [...tDotsBox.children].forEach((d,i)=>{
+    d.classList.toggle('active', i === tIndex);
+  });
+}
+
+function showTestimonial(i){
+  testimonials[tIndex].classList.remove('active');
+  tIndex = (i + testimonials.length) % testimonials.length;
+  testimonials[tIndex].classList.add('active');
+  updateTestimonialDots();
+  restartTestimonial();
+}
+
+function nextTestimonial(){
+  showTestimonial(tIndex + 1);
+}
+
+function restartTestimonial(){
+  clearInterval(tTimer);
+  tTimer = setInterval(nextTestimonial, 5000);
+}
+
+createTestimonialDots();
+updateTestimonialDots();
+restartTestimonial();
+
+  </script>
+</body>
+</html>
+
+
