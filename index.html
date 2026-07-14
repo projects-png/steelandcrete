@@ -571,6 +571,242 @@
 }
 
 
+    /* ============================================================
+       NEWS SECTION — CSS
+       All news styles are prefixed with .news- for easy isolation.
+       To add more cards: duplicate a <div class="news-card"> block.
+    ============================================================ */
+
+    /* Section wrapper — matches #testimonials background */
+    #news {
+      padding: 45px 40px 0px;
+      background: #f5f7fa;
+      text-align: center;
+      scroll-margin-top: 45px;
+    }
+
+    /* Section heading — matches #testimonials h2 */
+    #news h2 {
+      font-size: 2.4rem;
+      color: #111;
+      margin-bottom: 8px;
+    }
+
+    /* Sub-line — matches .sub style across the site */
+    #news .news-sub {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 50px;
+    }
+
+    /* ---------- Viewport — real native scrollbar on the right ---------- */
+	.news-outer{
+      position:relative;
+      max-width:960px;
+      margin:0 auto 0 auto;
+    }
+    .news-viewport {
+      overflow-x: hidden;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      border-radius: 16px;
+       height: 40vh;
+    }
+
+    /* Styled scrollbar — gold thumb, grey track (Chrome/Edge/Safari) */
+    .news-viewport::-webkit-scrollbar {
+      display: none;
+    }
+    .news-viewport {
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    /* ---------- Track: plain flex row (no transform needed) ---------- */
+    .news-track {
+      display: flex;
+      flex-direction: row;
+    }
+
+    /* ---------- Individual News Card ---------- */
+    /*
+     * TO ADD A NEW CARD:
+     * Copy the entire <div class="news-card"> … </div> block
+     * and paste it inside .news-track. JS detects card count automatically.
+     */
+    .news-card {
+      display: flex;
+      flex-direction: row;          /* image left (40%), content right (60%) */
+      min-height: 300px;            /* taller card */
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+      transition: box-shadow 0.35s ease, transform 0.35s ease;
+      text-align: left;
+      scroll-snap-align: start;
+      flex-shrink: 0;
+	  width: 100%;
+    }
+
+    .news-card:hover {
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18); /* matches .service-card:hover */
+      transform: translateY(-6px);
+    }
+
+    /* ---------- Card Image — 40% width ---------- */
+    .news-card-img {
+      width: 40%;
+      flex-shrink: 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .news-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s ease;
+    }
+
+    .news-card:hover .news-card-img img {
+      transform: scale(1.06);       /* matches .project-card:hover img */
+    }
+
+    /* Category badge — gold pill on top of image */
+    .news-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: #ffd700;          /* site gold accent */
+      color: #111;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 50px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+	.news-nav-btn{
+      position:absolute;
+      top:50%;
+     transform:translateY(-50%);
+     background:rgba(0,0,0,0.5);
+     color:#fff;
+     border:none;
+     width:34px;height:34px;
+     border-radius:50%;
+     font-size:18px;
+     cursor:pointer;
+     z-index:5;
+     display:flex;align-items:center;justify-content:center;
+    }
+   .news-nav-btn.prev{left:12px;}
+   .news-nav-btn.next{right:12px;}
+   .news-nav-btn:hover{background:rgba(0,0,0,0.8);}
+
+    /* ---------- Card Content — 60% width ---------- */
+    .news-card-content {
+      width: 60%;
+      padding: 48px 50px;           /* more breathing room */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    /* Date line */
+    .news-date {
+      font-size: 13px;
+      color: #777;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Gold rule before date */
+    .news-date::before {
+      content: '';
+      display: inline-block;
+      width: 22px;
+      height: 2px;
+      background: #ffd700;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* Title */
+    .news-title {
+      font-size: 1.6rem;            /* bigger headline */
+      font-weight: 700;
+      color: #111;
+      line-height: 1.3;
+      margin: 0;
+    }
+
+    /* Description */
+    .news-desc {
+      font-size: 15.5px;            /* slightly larger body text */
+      color: #444;
+      line-height: 1.75;
+      margin: 0;
+    }
+
+    /* Read More link — gold, matches nav hover color */
+    .news-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(255, 166, 0, 0.9);   /* matches header.scrolled nav a */
+      text-decoration: none;
+      transition: gap 0.2s ease, opacity 0.2s ease;
+      width: fit-content;
+      margin-top: 4px;
+    }
+
+    .news-link:hover {
+      gap: 10px;
+      color: #ffd700;
+    }
+
+
+    /* ============================================================
+       NEWS — MOBILE RESPONSIVE
+       Image stacks above content on screens ≤ 768px
+    ============================================================ */
+    @media (max-width: 768px) {
+      #news {
+        padding: 60px 20px;
+      }
+
+      .news-card {
+        flex-direction: column;     /* image on top, text below */
+        min-height: auto;
+      }
+
+      .news-card-img {
+        width: 100%;
+        height: 220px;
+      }
+
+      .news-card-content {
+        width: 100%;
+        padding: 24px 22px;
+      }
+
+      .news-title {
+        font-size: 1.1rem;
+      }
+    }
+
     /* WhatsApp */
     .whatsapp-btn{position:fixed;bottom:20px;right:20px;background:#25d366;color:#fff;padding:15px;border-radius:50%;box-shadow:0 4px 8px rgba(0,0,0,0.2);font-size:24px;cursor:pointer;z-index:200;}
 
@@ -589,6 +825,7 @@
     </div>
     <div class="menu-toggle" id="menuToggle"><span></span><span></span><span></span></div>
     <nav id="navMenu">
+        <a href="#news">News</a>
         <a href="#about">About</a>
         <a href="#services">Services</a>
       <a href="#projects">Projects</a>   
@@ -607,6 +844,51 @@
     <div class="slide"><img src="5.jpeg"><div class="overlay-text">Where logic meets illusion</div></div>
     <div class="dots" id="dots"></div>
   </section>
+
+  <!-- ============================================================
+       NEWS SECTION — HTML
+       To add more cards: duplicate a <div class="news-card"> block
+       inside <div class="news-track">. Each card needs:
+         - .news-card-img  (left 40%)
+         - .news-card-content  (right 60%)
+       The JS will auto-detect how many cards there are.
+  ============================================================ -->
+  <section id="news">
+
+    <!-- Section Heading -->
+    <h2>News</h2>
+    <p class="news-sub">Updates, milestones &amp; insights from Steel &amp; Crete</p>
+
+    <div class="news-outer">
+      <div class="news-viewport" id="newsViewport">
+        <div class="news-track" id="newsTrack">
+
+        <!-- =============================================
+             NEWS CARD 1(LATEST NEWS, ORDER PRIORITY)
+             To duplicate: copy this entire block,
+             change image src, badge, date, title, desc.
+        ============================================= -->
+        <div class="news-card">
+          <!-- Image — 40% width -->
+          <div class="news-card-img">
+            <img src="i2a.png" alt="Celebrating 10 years of i2a!!">
+          </div>
+          <!-- Content — 60% width -->
+          <div class="news-card-content">
+            <span class="news-date">July 11, 2026</span>
+            <h3 class="news-title">Celebrating 10 years of i2a!!</h3>
+            <p class="news-desc">
+              The studio has given the incredible opportunity to design many of the popular and landmark building structures, including the RED HOUSE.
+            </p>
+          </div>
+        </div>
+        <!-- /NEWS CARD 1 -->
+        </div><!-- /newsTrack -->
+      </div><!-- /newsViewport -->
+      <button class="news-nav-btn prev" onclick="newsGoPrev()">‹</button>
+      <button class="news-nav-btn next" onclick="newsGoNext()">›</button>
+    </div><!-- /news-outer -->
+  </section><!-- /news -->
 
   <!-- About / Founders -->
   <section id="about">
@@ -1060,6 +1342,92 @@ function restartTestimonial(){
 createTestimonialDots();
 updateTestimonialDots();
 restartTestimonial();
+
+    /* ============================================================
+       NEWS SECTION — JAVASCRIPT
+       Auto-scroll, hover-pause, manual scrollbar, arrow buttons,
+       dot indicators. No external libraries required.
+
+       CONFIG: change NEWS_INTERVAL_MS to adjust auto-scroll speed.
+    ============================================================ */
+    (function () {
+      /* ---------- Configuration ---------- */
+      var NEWS_INTERVAL_MS = 4500;    // auto-scroll interval (4-5 seconds)
+
+      /* ---------- Element references ---------- */
+      var viewport    = document.getElementById('newsViewport');
+      var track       = document.getElementById('newsTrack');
+      var cards       = Array.from(track.querySelectorAll('.news-card'));
+
+      var total       = cards.length;
+      var current     = 0;
+      var autoTimer   = null;
+      var cardHeight  = 0;
+      var isScrolling = false;
+	  var isHovering = false;
+
+      /* ---------- Measure one card's height and fix viewport height ---------- */
+      function measureCard() {
+        cardHeight = cards[0].offsetWidth;   // now really "cardWidth" but reuse var
+      }
+
+      /* ---------- Scroll to a specific card index ---------- */
+    function goTo(index) {
+        if (index < 0) index = 0;
+        if (index >= total) index = total - 1;
+        current = index;
+        isScrolling = true;
+        viewport.scrollTo({ left: current * cardHeight, behavior: 'smooth' });
+        restartAuto();
+        clearTimeout(goTo._t);
+        goTo._t = setTimeout(function () { isScrolling = false; }, 700);
+        updateNavButtons();
+      }
+
+      function updateNavButtons(){
+        var prevBtn = document.querySelector('.news-nav-btn.prev');
+        var nextBtn = document.querySelector('.news-nav-btn.next');
+        prevBtn.style.display = (current === 0) ? 'none' : 'flex';
+        nextBtn.style.display = (current === total - 1) ? 'none' : 'flex';
+      }
+
+      /* ---------- Sync current when user drags the real scrollbar ---------- */
+       viewport.addEventListener('scroll', function () {
+        if (isScrolling) return;
+        var idx = Math.round(viewport.scrollLeft / cardHeight);
+        if (idx !== current) {
+          current = idx;
+          restartAuto();
+        }
+      });
+
+      /* ---------- Auto-scroll ---------- */
+      function startAuto() {
+        // auto-scroll off
+      }
+      function stopAuto()  { clearInterval(autoTimer); }
+      function restartAuto() { stopAuto(); if (!isHovering) startAuto(); }
+
+      /* ---------- Hover: pause auto-scroll ---------- */
+      viewport.addEventListener('mouseenter', function(){ isHovering = true; stopAuto(); });
+      viewport.addEventListener('mouseleave', function(){ isHovering = false; startAuto(); });
+
+      /* touch swipe removed */
+      /* ---------- Recalculate on resize ---------- */
+      window.addEventListener('resize', function () {
+        measureCard();
+        viewport.scrollLeft = current * cardHeight;
+      });
+
+      /* ---------- Init ---------- */
+      measureCard();
+	  updateNavButtons();
+	  window.newsGoNext = function(){ goTo(current + 1); };
+      window.newsGoPrev = function(){ goTo(current - 1); };
+    })();
+    /* ============================================================
+       END NEWS SECTION JAVASCRIPT
+    ============================================================ */
 
   </script>
 </body>
