@@ -602,7 +602,7 @@
     /* ---------- Viewport — real native scrollbar on the right ---------- */
 	.news-outer{
       position:relative;
-      max-width:960px;
+      max-width:1200px;
       margin:0 auto 0 auto;
     }
     .news-viewport {
@@ -668,7 +668,14 @@
       height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform 0.6s ease;
+      transition: transform 0.6s ease, opacity 1.5s ease;
+      position: absolute;
+      top: 0; left: 0;
+      opacity: 0;
+    }
+
+    .news-card-img img.active {
+      opacity: 1;
     }
 
     .news-card:hover .news-card-img img {
@@ -711,11 +718,11 @@
     /* ---------- Card Content — 60% width ---------- */
     .news-card-content {
       width: 60%;
-      padding: 48px 50px;           /* more breathing room */
+      padding: 20px 50px;           /* more breathing room */
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 16px;
+      gap: 8px;
     }
 
     /* Date line */
@@ -864,7 +871,6 @@
     <div class="news-outer">
       <div class="news-viewport" id="newsViewport">
         <div class="news-track" id="newsTrack">
-
         <!-- =============================================
              NEWS CARD 1(LATEST NEWS, ORDER PRIORITY)
              To duplicate: copy this entire block,
@@ -872,8 +878,26 @@
         ============================================= -->
         <div class="news-card">
           <!-- Image — 40% width -->
+          <div class="news-card-img" data-slideshow="true">
+            <img src="BOUTIQUE.jpeg" alt="Sustainable Earthcrete Structure" class="active">
+            <img src="BOUTIQUE2.jpeg" alt="Sustainable Earthcrete Structure">
+          </div>
+          <!-- Content — 60% width -->
+          <div class="news-card-content">
+            <span class="news-date">July 14, 2026</span>
+            <h3 class="news-title">Sustainable Earthcrete Structure</h3>
+            <p class="news-desc">
+              Senior Structural Engineer Daniel A V is evaluating the structural stability of a boutique retreat, an earthcrete structure, under construction at Kamblikkandam, Idukki. The structure is designed using poured earth walls reinforced with structural bands provided to a minimum to reduce carbon emissions. The structural form is studied in detail to identify the areas of tension, and RCC bands are provided for structural stability. This hybrid design approach is used to design different types of structures made of Earthcrete, CSEB blocks, used tyres, terracotta cups, Pendant Vault, etc.
+			 </div>
+        </div>
+        <!-- /NEWS CARD 1 -->
+		<!-- =============================================
+             NEWS CARD 2
+        ============================================= -->
+        <div class="news-card">
+          <!-- Image — 40% width -->
           <div class="news-card-img">
-            <img src="i2a.png" alt="Celebrating 10 years of i2a!!">
+            <img src="i2a.png" alt="Celebrating 10 years of i2a!!" class="active">
           </div>
           <!-- Content — 60% width -->
           <div class="news-card-content">
@@ -884,7 +908,7 @@
             </p>
           </div>
         </div>
-        <!-- /NEWS CARD 1 -->
+        <!-- /NEWS CARD 2 -->
         </div><!-- /newsTrack -->
       </div><!-- /newsViewport -->
       <button class="news-nav-btn prev" onclick="newsGoPrev()">‹</button>
@@ -1426,6 +1450,19 @@ restartTestimonial();
 	  updateNavButtons();
 	  window.newsGoNext = function(){ goTo(current + 1); };
       window.newsGoPrev = function(){ goTo(current - 1); };
+
+      /* ---------- Per-card image slideshow (only cards with data-slideshow) ---------- */
+      var slideBoxes = document.querySelectorAll('.news-card-img[data-slideshow="true"]');
+      slideBoxes.forEach(function(box){
+        var imgs = box.querySelectorAll('img');
+        if (imgs.length < 2) return;
+        var i = 0;
+        setInterval(function(){
+          imgs[i].classList.remove('active');
+          i = (i + 1) % imgs.length;
+          imgs[i].classList.add('active');
+        }, 3000);
+      });
     })();
     /* ============================================================
        END NEWS SECTION JAVASCRIPT
